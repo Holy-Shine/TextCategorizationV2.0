@@ -1,0 +1,29 @@
+-----------------------------------------------------------dataSet--------------------------------------------------------------
+类别文章数目(database.txt)：
+	education 88
+	entertainment 1035
+	it 352		
+	culture 2676
+	history 1852
+	military 1772
+	reading 8064
+	society&law 21691
+shuffle后每个类别选取1000篇文章
+
+#对于train.txt
+类别-去重+去停用词前后的特征term数目
+	entertainment 36589
+	entertainment 34151
+	culture 77953
+	culture 73860
+	history 83417
+	history 79411
+	military 31352
+	military 29335
+	reading 44160
+	reading 41641
+	society&law 41670
+	society&law 39134
+	
+	NB正确率：66.7%
+	-----------------------------------------------------------dataSet2--------------------------------------------------------------
