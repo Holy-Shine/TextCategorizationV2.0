@@ -129,7 +129,7 @@ def crtPaper2words():
     '''
     sf=open('../preTrain/w2v_paper2words.txt','w')
     jieba.load_userdict('dict.txt')
-    with open('dataSet/dataSet2.txt','r') as f:
+    with open('dataSet/train.txt','r') as f:
         i=0
         for line in f:
             arr=line.split(' ')
@@ -139,9 +139,7 @@ def crtPaper2words():
             for word in wordList:
                 sf.write(word+' ')
             sf.write('\n')
-            i+=1
-            if i==3:
-                break
+
 
     
 if __name__ =='__main__':
