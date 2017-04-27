@@ -4,9 +4,11 @@
 做一些准备工作
 
 含有模块：
-    divideDatabase 划分数据集、验证集、测试集
-    crtCls2Terms      创建类别-词语字典
+    divideDatabase      划分数据集、验证集、测试集
+    crtCls2Terms        创建类别-词语字典
     crtCls2Text         创建类别-文章-文字字典
+    crtPaper2words      创建word2vec的训练格式文件
+    trainWordsVec()     训练词向量
 生成文件
     dict.pkl                 形式{class1:[word1,word2...],class2:[...]}
     cls2Text.pkl         形式{class1:[text1,text2...],class2:[...]}
@@ -15,6 +17,9 @@ import random
 import sys,cPickle
 import jieba
 from toolFunc import segText,rmvStopWord
+from gensim.models import word2vec as w2v
+import multiprocessing
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -140,6 +145,25 @@ def crtPaper2words():
                 sf.write(word+' ')
             sf.write('\n')
 
+def trainWordsVec():
+    '''使用word2vec训练语料
+    
+    文件输入:
+        preTrain/w2v_paper2words.txt
+    模型输出：
+        model/wordVec.model
+    '''
+    #输入语料
+    inq='../preTrain/w2v_paper2words.txt'
+    #输出模型1
+    out1='model/wordVec.model'
+    # out2为原始c版本word2vec的vector格式的模型
+    out2 = 'model/wordVec.vector'
+    model=w2v.Word2Vec(w2v.LineSentence(inq),
+                       size=500, window=5, min_count=3,
+                       workers=multiprocessing.cpu_count())
+    model.wv.save(out1)
+    model.wv.save_word2vec_format(out2, binary=False)
 
     
 if __name__ =='__main__':
@@ -152,7 +176,8 @@ if __name__ =='__main__':
     #2、对训练集分词、去停用词，构建不同类别的词语集合字典dic
 #     crtCls2Terms()
 #         crtCls2Text()
-    crtPaper2words()
+#     crtPaper2words()
+    trainWordsVec()
 
 
 

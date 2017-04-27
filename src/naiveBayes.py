@@ -20,7 +20,6 @@ def countRate(wl,cls2Text):
     返回
         最大概率标签
     """
-    retList=[]
     maxRate=-float('inf')
     label=None
     for cls in cls2Text.keys():
