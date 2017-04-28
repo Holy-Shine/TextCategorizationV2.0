@@ -8,7 +8,7 @@
     预测模型
 """
 from keras.models import Sequential
-from keras.layers import Masking, Dropout, Dense
+from keras.layers import Masking, Dropout, Dense,Embedding
 from keras.layers import LSTM
 import gensim.models as vecMod
 import numpy as np
@@ -17,7 +17,7 @@ import time
 
 
 class RNNs(object):
-    def __init__(self, inputShape=400, maxLenth=400, batch_size=256, n_epoch=20, verbose=1, shuffle=True):
+    def __init__(self, inputShape=400, maxLenth=400, batch_size=300, n_epoch=20, verbose=1, shuffle=True):
         self.inputShape = inputShape
         self.maxLenth = maxLenth
         self.n_epoch = 20
@@ -51,19 +51,22 @@ class RNNs(object):
         vLabels = cPickle.load(open('model/rnnModel/vLabels.pkl', 'r'))
         t2=time.time()
         print 'load set finished.take time:%fs'% (t2-t1)
-        model.fit_generator(self.gLoadTrainData(), steps_per_epoch=4800,epochs=self.n_epoch,verbose=self.verbose,
+        model.fit_generator(self.gLoadTrainData(self.batch_size), steps_per_epoch=16,epochs=self.n_epoch,verbose=self.verbose,
                             validation_data=(valid, vLabels))
+        print valid.shape
         t3=time.time()
         print 'train model finished.take time:%fs'% (t3-t1)
         model.save_weights('lstm_weight.h5')
 
-    def gLoadTrainData(self):
+    def gLoadTrainData(self,batch_size):
         """加载数据集，生成器
 
         """
         w2vmod = vecMod.Word2Vec.load('model/wordVec.model')
         while 1:
             with open('dataSet/rnn_train.txt', 'r') as f:
+                num=0
+                batchList,batchLabels=[],[]
                 for line in f:
                     label = [0.0] * 6
                     sample = [[0.0] * self.inputShape] * self.maxLenth
@@ -79,8 +82,17 @@ class RNNs(object):
                                 pass
                             # if wordsL[index].decode('utf-8') in w2vmod:
                             #     sample[index] = w2vmod[wordsL[index].decode('utf-8')].tolist()
-                        print 'add a sample'
-                        yield (np.array(sample, dtype='float32'), np.array(label, dtype='float32'))
+                        num+=1
+                        batchList.append(sample)
+                        batchLabels.append(label)
+                        TrainBatch=np.array(batchList,dtype='float32')
+                        TrainLabel=np.array(batchLabels,dtype='float32')
+                        if num%batch_size==0:
+                            print 'add a sample'
+                            yield (TrainBatch,TrainLabel)
+                            batchList, batchLabels = [], []
+
+
 
     def packValidData(self):
         """组织验证集数据,生成网络输入所需数据格式
@@ -103,8 +115,8 @@ class RNNs(object):
                     validSet.append(sample)
                     vLabels.append(label)
 
-        cPickle.dump(validSet,open('model/rnnModel/valid.pkl','w'))
-        cPickle.dump(vLabels,open('model/rnnModel/vLabels.pkl','w'))
+        cPickle.dump(np.array(validSet),open('model/rnnModel/valid.pkl','w'))
+        cPickle.dump(np.array(vLabels),open('model/rnnModel/vLabels.pkl','w'))
 
 
 if __name__ == '__main__':
