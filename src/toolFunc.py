@@ -24,7 +24,7 @@ def segText(text):
     ws = "/ ".join(seg_list)
     for i in ws.split('/'):
         i=i.replace(" ", "")
-        if re.match(ur"[\u4E00-\u9FFF]+",i) != None:
+        if re.match(ur"[\u4E00-\u9FFF0-9]+",i) != None:
             retList.append(i.encode('utf-8'))
     return retList
 

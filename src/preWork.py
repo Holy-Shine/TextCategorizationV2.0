@@ -162,10 +162,33 @@ def trainWordsVec():
     model=w2v.Word2Vec(w2v.LineSentence(inq),
                        size=500, window=5, min_count=3,
                        workers=multiprocessing.cpu_count())
-    model.wv.save(out1)
-    model.wv.save_word2vec_format(out2, binary=False)
+    model.save(out1)
 
-    
+def rnn_divideDatabase():
+    """rnn的数据集切分策略
+    输出：
+        rnn_train.txt
+        rnn_test.txt
+        rnn_valid.text
+    """
+    jieba.load_userdict('dict.txt')
+    def openAndSave(inf,outf):
+        outf=open(outf,'w')
+        with open(inf, 'r') as f:
+            for line in f:
+                arr = line.split(' ')
+                wordList = []
+                if len(arr) > 1:
+                    wordList = segText(arr[1])
+                    outf.write(arr[0]+'::')
+                for word in wordList:
+                    outf.write(word + ' ')
+                outf.write('\n')
+        outf.close()
+    openAndSave('dataSet/train.txt','dataSet/rnn_train.txt')
+    openAndSave('dataSet/test.txt','dataSet/rnn_test.txt')
+    openAndSave('dataSet/valid.txt','dataSet/rnn_valid.txt')
+
 if __name__ =='__main__':
  
     
@@ -177,8 +200,9 @@ if __name__ =='__main__':
 #     crtCls2Terms()
 #         crtCls2Text()
 #     crtPaper2words()
-    trainWordsVec()
+#     trainWordsVec()
+
+    # rnn_divideDatabase()
 
 
-
-    
+    pass
