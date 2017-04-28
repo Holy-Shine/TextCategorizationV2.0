@@ -37,6 +37,7 @@ class RNNs(object):
         t2=time.time()
         print 'bulid model finished.take time:%fs'% (t2-t1)
 
+
     def train(self,Trained=False):
         t1=time.time()
         print 'training model...'
@@ -44,12 +45,16 @@ class RNNs(object):
         model.compile(loss='binary_crossentropy',
                       optimizer='adam',
                       metrics=['accuracy'])
+        t1=time.time()
+        print 'load valid set...'
         valid = cPickle.load(open('model/rnnModel/valid.pkl', 'r'))
         vLabels = cPickle.load(open('model/rnnModel/vLabels.pkl', 'r'))
+        t2=time.time()
+        print 'load set finished.take time:%fs'% (t2-t1)
         model.fit_generator(self.gLoadTrainData(), steps_per_epoch=4800,epochs=self.n_epoch,verbose=self.verbose,
                             validation_data=(valid, vLabels))
-        t2=time.time()
-        print 'train model finished.take time:%fs'% (t2-t1)
+        t3=time.time()
+        print 'train model finished.take time:%fs'% (t3-t1)
         model.save_weights('lstm_weight.h5')
 
     def gLoadTrainData(self):
@@ -61,21 +66,21 @@ class RNNs(object):
             with open('dataSet/rnn_train.txt', 'r') as f:
                 for line in f:
                     label = [0.0] * 6
-                    sample = [[0.0] * self.inputShape] * self.maxlenth
+                    sample = [[0.0] * self.inputShape] * self.maxLenth
                     arr = line.split('::')
                     if len(arr) > 1:
                         label[int(arr[0]) - 2] = 1.0
                         wordsL = arr[1].split(' ')
                         i = 0
-                        for index in xrange(min(self.maxlenth, len(wordsL))):
+                        for index in xrange(min(self.maxLenth, len(wordsL))):
                             try:
                                 sample[index] = w2vmod[wordsL[index].decode('utf-8')].tolist()
                             except:
                                 pass
                             # if wordsL[index].decode('utf-8') in w2vmod:
                             #     sample[index] = w2vmod[wordsL[index].decode('utf-8')].tolist()
-
-                    yield (np.array(sample, dtype='float32'), np.array(label, dtype='float32'))
+                        print 'add a sample'
+                        yield (np.array(sample, dtype='float32'), np.array(label, dtype='float32'))
 
     def packValidData(self):
         """组织验证集数据,生成网络输入所需数据格式
@@ -98,8 +103,8 @@ class RNNs(object):
                     validSet.append(sample)
                     vLabels.append(label)
 
-        cPickle.dump(validSet,open('valid.pkl','w'))
-        cPickle.dump(vLabels,open('vLabels.pkl','w'))
+        cPickle.dump(validSet,open('model/rnnModel/valid.pkl','w'))
+        cPickle.dump(vLabels,open('model/rnnModel/vLabels.pkl','w'))
 
 
 if __name__ == '__main__':
