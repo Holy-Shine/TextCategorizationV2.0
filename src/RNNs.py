@@ -17,7 +17,7 @@ import time
 
 
 class RNNs(object):
-    def __init__(self, inputShape=400, maxLenth=500, batch_size=256, n_epoch=20, verbose=1, shuffle=True):
+    def __init__(self, inputShape=400, maxLenth=400, batch_size=256, n_epoch=20, verbose=1, shuffle=True):
         self.inputShape = inputShape
         self.maxLenth = maxLenth
         self.n_epoch = 20
