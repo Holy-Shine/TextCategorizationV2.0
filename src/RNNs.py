@@ -57,24 +57,25 @@ class RNNs(object):
 
         """
         w2vmod = vecMod.Word2Vec.load('model/wordVec.model')
-        with open('dataSet/rnn_train.txt', 'r') as f:
-            for line in f:
-                label = [0.0] * 6
-                sample = [[0.0] * self.inputShape] * self.maxlenth
-                arr = line.split('::')
-                if len(arr) > 1:
-                    label[int(arr[0]) - 2] = 1.0
-                    wordsL = arr[1].split(' ')
-                    i = 0
-                    for index in xrange(min(self.maxlenth, len(wordsL))):
-                        try:
-                            sample[index] = w2vmod[wordsL[index].decode('utf-8')].tolist()
-                        except:
-                            pass
-                        # if wordsL[index].decode('utf-8') in w2vmod:
-                        #     sample[index] = w2vmod[wordsL[index].decode('utf-8')].tolist()
+        while 1:
+            with open('dataSet/rnn_train.txt', 'r') as f:
+                for line in f:
+                    label = [0.0] * 6
+                    sample = [[0.0] * self.inputShape] * self.maxlenth
+                    arr = line.split('::')
+                    if len(arr) > 1:
+                        label[int(arr[0]) - 2] = 1.0
+                        wordsL = arr[1].split(' ')
+                        i = 0
+                        for index in xrange(min(self.maxlenth, len(wordsL))):
+                            try:
+                                sample[index] = w2vmod[wordsL[index].decode('utf-8')].tolist()
+                            except:
+                                pass
+                            # if wordsL[index].decode('utf-8') in w2vmod:
+                            #     sample[index] = w2vmod[wordsL[index].decode('utf-8')].tolist()
 
-                yield (np.array(sample, dtype='float32'), np.array(label, dtype='float32'))
+                    yield (np.array(sample, dtype='float32'), np.array(label, dtype='float32'))
 
     def packValidData(self):
         """组织验证集数据,生成网络输入所需数据格式
