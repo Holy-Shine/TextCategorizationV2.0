@@ -145,7 +145,7 @@ def crtPaper2words():
                 sf.write(word+' ')
             sf.write('\n')
 
-def trainWordsVec():
+def trainWordsVec(dimension=500,window=5,min_count=3):
     '''使用word2vec训练语料
     
     文件输入:
@@ -160,7 +160,7 @@ def trainWordsVec():
     # out2为原始c版本word2vec的vector格式的模型
     out2 = 'model/wordVec.vector'
     model=w2v.Word2Vec(w2v.LineSentence(inq),
-                       size=500, window=5, min_count=3,
+                       size=dimension, window=window, min_count=min_count,
                        workers=multiprocessing.cpu_count())
     model.save(out1)
 
@@ -200,7 +200,7 @@ if __name__ =='__main__':
 #     crtCls2Terms()
 #         crtCls2Text()
 #     crtPaper2words()
-#     trainWordsVec()
+    trainWordsVec(dimension=400)
 
     # rnn_divideDatabase()
 
