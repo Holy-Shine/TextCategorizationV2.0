@@ -20,10 +20,10 @@ class RNNs(object):
     def __init__(self, inputShape=400, maxLenth=400, batch_size=300, n_epoch=20, verbose=1, shuffle=True):
         self.inputShape = inputShape
         self.maxLenth = maxLenth
-        self.n_epoch = 20
-        self.verbose = 1
-        self.shuffle = True
-        self.batch_size = 256
+        self.n_epoch = n_epoch
+        self.verbose = verbose
+        self.shuffle = shuffle
+        self.batch_size = batch_size
 
     def buildModel(self, lstm=False):
         t1=time.time()
@@ -53,7 +53,6 @@ class RNNs(object):
         print 'load set finished.take time:%fs'% (t2-t1)
         model.fit_generator(self.gLoadTrainData(self.batch_size), steps_per_epoch=16,epochs=self.n_epoch,verbose=self.verbose,
                             validation_data=(valid, vLabels))
-        print valid.shape
         t3=time.time()
         print 'train model finished.take time:%fs'% (t3-t1)
         model.save_weights('lstm_weight.h5')

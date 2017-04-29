@@ -200,7 +200,7 @@ if __name__ =='__main__':
 #     crtCls2Terms()
 #         crtCls2Text()
 #     crtPaper2words()
-    trainWordsVec(dimension=400)
+    trainWordsVec(dimension=100)
 
     # rnn_divideDatabase()
 
