@@ -5,13 +5,16 @@
 
 含有模块：
     divideDatabase      划分数据集、验证集、测试集
-    crtCls2Terms        创建类别-词语字典
-    crtCls2Text         创建类别-文章-文字字典
-    crtPaper2words      创建word2vec的训练格式文件
-    trainWordsVec()     训练词向量
+    nb_crtCls2Terms     创建类别-词语字典
+    nb_crtCls2Text      创建类别-文章-文字字典
+    w2v_crtPaper2words  创建word2vec的训练格式文件
+    w2v_trainWordsVec() 训练词向量
+    rnn_divideDataBase() RNN三种集合切分
+    
 生成文件
     dict.pkl                 形式{class1:[word1,word2...],class2:[...]}
     cls2Text.pkl         形式{class1:[text1,text2...],class2:[...]}
+    
 """
 import random
 import sys,cPickle
@@ -80,11 +83,13 @@ def divideDatabase():
     validPath.close()
     trainPath.close()
       
-def crtCls2Terms():
+def nb_crtCls2Terms():
     """构建类别-词语字典
     
+    输出文件: /model/NB/dict.pkl 
+        e.g. {class1:[word1,word2...],class2:[...]...}
     """
-    file=open('dataSet/train.txt','r')
+    file=open('../dataSet/train.txt','r')
     jieba.load_userdict('dict.txt')
     dic={}
     for line in file:
@@ -102,13 +107,15 @@ def crtCls2Terms():
         print key,len(dic[key])
         dic[key]=rmvStopWord(dic[key], stopWords)
         print key,len(dic[key])
-    cPickle.dump(dic, open("model/dict.pkl",'w'), protocol=0)
+    cPickle.dump(dic, open("../model/NB/dict.pkl",'w'), protocol=0)
     
-def crtCls2Text():
+def nb_crtCls2Text():
     """创建类别-Text字典
     
+    输出文件: /model/cls2Text.pkl
+        e.g. {class1:[text1,text2...],class2:[...]}  
     """
-    file=open('dataSet/train.txt','r')
+    file=open('../dataSet/train.txt','r')
     cat={}
     for line in file:
         tp=line.split(' ')
@@ -117,24 +124,21 @@ def crtCls2Text():
         cat[tp[0]].append(tp[1])
     
     file.close()
-    cPickle.dump(cat, open('model/cls2Text.pkl','w'), protocol=0)
+    cPickle.dump(cat, open('../model/cls2Text.pkl','w'), protocol=0)
 
-         
-    
-def train(trainPath):
-    pass
+
 
 
 #以下是word2vec的相关处理内容
-def crtPaper2words():
+def w2v_crtPaper2words():
     '''按照word2vec的需求，处理成一篇文章以个word list的形式
     
     输出文件：
         w2v_paper2words.txt
     '''
-    sf=open('../preTrain/w2v_paper2words.txt','w')
+    sf=open('../dataSet/w2v_paper2words.txt','w')
     jieba.load_userdict('dict.txt')
-    with open('dataSet/train.txt','r') as f:
+    with open('../dataSet/train.txt','r') as f:
         i=0
         for line in f:
             arr=line.split(' ')
@@ -145,7 +149,7 @@ def crtPaper2words():
                 sf.write(word+' ')
             sf.write('\n')
 
-def trainWordsVec(dimension=500,window=5,min_count=3):
+def w2v_trainWordsVec(dimension=500,window=5,min_count=3):
     '''使用word2vec训练语料
     
     文件输入:
@@ -154,15 +158,13 @@ def trainWordsVec(dimension=500,window=5,min_count=3):
         model/wordVec.model
     '''
     #输入语料
-    inq='../preTrain/w2v_paper2words.txt'
+    inq='../dataSet/w2v_paper2words.txt'
     #输出模型1
-    out1='model/wordVec.model'
-    # out2为原始c版本word2vec的vector格式的模型
-    out2 = 'model/wordVec.vector'
+    out='../model/W2V/wordVec.model'
     model=w2v.Word2Vec(w2v.LineSentence(inq),
                        size=dimension, window=window, min_count=min_count,
                        workers=multiprocessing.cpu_count())
-    model.save(out1)
+    model.save(out)
 
 def rnn_divideDatabase():
     """rnn的数据集切分策略
@@ -185,9 +187,9 @@ def rnn_divideDatabase():
                     outf.write(word + ' ')
                 outf.write('\n')
         outf.close()
-    openAndSave('dataSet/train.txt','dataSet/rnn_train.txt')
-    openAndSave('dataSet/test.txt','dataSet/rnn_test.txt')
-    openAndSave('dataSet/valid.txt','dataSet/rnn_valid.txt')
+    openAndSave('../dataSet/train.txt','../dataSet/rnn_train.txt')
+    openAndSave('../dataSet/test.txt','../dataSet/rnn_test.txt')
+    openAndSave('../dataSet/valid.txt','../dataSet/rnn_valid.txt')
 
 if __name__ =='__main__':
  
@@ -199,8 +201,8 @@ if __name__ =='__main__':
     #2、对训练集分词、去停用词，构建不同类别的词语集合字典dic
 #     crtCls2Terms()
 #         crtCls2Text()
-#     crtPaper2words()
-    trainWordsVec(dimension=100)
+#     w2v_crtPaper2words()
+    w2v_trainWordsVec(dimension=100)
 
     # rnn_divideDatabase()
 

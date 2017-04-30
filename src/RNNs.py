@@ -47,23 +47,23 @@ class RNNs(object):
                       metrics=['accuracy'])
         t1=time.time()
         print 'load valid set...'
-        valid = cPickle.load(open('model/rnnModel/valid.pkl', 'r'))
-        vLabels = cPickle.load(open('model/rnnModel/vLabels.pkl', 'r'))
+        valid = cPickle.load(open('../model/RNNs/valid.pkl', 'r'))
+        vLabels = cPickle.load(open('../model/RNNs/vLabels.pkl', 'r'))
         t2=time.time()
         print 'load set finished.take time:%fs'% (t2-t1)
         model.fit_generator(self.gLoadTrainData(self.batch_size), steps_per_epoch=16,epochs=self.n_epoch,verbose=self.verbose,
                             validation_data=(valid, vLabels))
         t3=time.time()
         print 'train model finished.take time:%fs'% (t3-t1)
-        model.save_weights('lstm_weight.h5')
+        model.save_weights('../model/RNNs/lstm_weight.h5')
 
     def gLoadTrainData(self,batch_size):
         """加载数据集，生成器
 
         """
-        w2vmod = vecMod.Word2Vec.load('model/wordVec.model')
+        w2vmod = vecMod.Word2Vec.load('../model/W2V/wordVec.model')
         while 1:
-            with open('dataSet/rnn_train.txt', 'r') as f:
+            with open('../dataSet/rnn_train.txt', 'r') as f:
                 num=0
                 batchList,batchLabels=[],[]
                 for line in f:
@@ -96,9 +96,9 @@ class RNNs(object):
     def packValidData(self):
         """组织验证集数据,生成网络输入所需数据格式
         """
-        w2vmod = vecMod.Word2Vec.load('model/wordVec.model')
+        w2vmod = vecMod.Word2Vec.load('../model/W2V/wordVec.model')
         validSet,vLabels=[],[]
-        with open('dataSet/rnn_valid.txt', 'r') as f:
+        with open('../dataSet/rnn_valid.txt', 'r') as f:
             for line in f:
                 label = [0.0] * 6
                 sample = [[0.0] * self.inputShape] * self.maxLenth
@@ -114,13 +114,13 @@ class RNNs(object):
                     validSet.append(sample)
                     vLabels.append(label)
 
-        cPickle.dump(np.array(validSet),open('model/rnnModel/valid.pkl','w'))
-        cPickle.dump(np.array(vLabels),open('model/rnnModel/vLabels.pkl','w'))
+        cPickle.dump(np.array(validSet),open('../model/RNNs/valid.pkl','w'))
+        cPickle.dump(np.array(vLabels),open('../model/RNNs/vLabels.pkl','w'))
 
 
 if __name__ == '__main__':
-    lstm=RNNs()
-    # lstm.packValidData()
+    lstm=RNNs(inputShape=100,maxLenth=100)
+    lstm.packValidData()
     lstm.buildModel()
     lstm.train(Trained=False)
 

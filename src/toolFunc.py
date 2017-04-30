@@ -4,7 +4,7 @@
 工具函数库
 
 包含模块：
-    segText                 中文分词，返回分好词的list
+    segText         中文分词，返回分好词的list
     rmvStopWord    去停用词
 """
 import jieba
