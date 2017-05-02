@@ -63,11 +63,11 @@
     class RNNs:
         __init__(inputShape,maxLenth,batch_size,n_epoch,verbose, shuffle)
             :param
-                inputShape:输入维度，实验中为词向量维度.默认300\n
+                inputShape:输入维度，实验中为词向量维度.默认300
                 maxLenth:时间步最长个数，实验中为最大文本词语个数
-                batch_size:训练批大小.默认300\n
-                nb_epoch:训练迭代次数.默认100\n
-                verbose:显示训练信息.默认1\n
+                batch_size:训练批大小.默认300
+                nb_epoch:训练迭代次数.默认100
+                verbose:显示训练信息.默认1
                 shuffle:是否打乱数据.默认1
         bulidModel():
             构建模型
@@ -83,9 +83,9 @@
             w2v_crtPaper2words  产生dataSet/w2v_paper2words.txt
             w2v_trainWordsVec() 产生model/W2V/wordVec.model
     e.g.
-        lstm=RNNs(inputShape=100,maxLenth=100)\n
-        lstm.packValidData()\n
-        lstm.buildModel()\n
+        lstm=RNNs(inputShape=100,maxLenth=100)
+        lstm.packValidData()
+        lstm.buildModel()
         lstm.train(Trained=False)
 	"""
 ### 3-CNN
@@ -95,12 +95,12 @@
     class CNNs:
         __init__(input_shape,nb_filters,nb_conv,nb_pool,batch_size,np_epoch,verbose)
             :param
-                input_shape:输入维度，3D张量，实验中为文本词向量维度.默认(1,100,100)\n
-                nb_filters:卷积核个数，实验中为两个卷积层，各3个卷积核.默认(3,3)\n
-                nb_conv:卷积模板大小.默认(3,3)\n
-                nb_pool:池化模板大小.默认(2,2)\n
-                batch_size:训练批大小.默认300\n
-                nb_epoch:训练迭代次数.默认100\n
+                input_shape:输入维度，3D张量，实验中为文本词向量维度.默认(1,100,100)
+                nb_filters:卷积核个数，实验中为两个卷积层，各3个卷积核.默认(3,3)
+                nb_conv:卷积模板大小.默认(3,3)
+                nb_pool:池化模板大小.默认(2,2)
+                batch_size:训练批大小.默认300
+                nb_epoch:训练迭代次数.默认100
                 verbose:显示训练信息.默认1
         bulidModel():
             构建模型
@@ -117,9 +117,9 @@
             w2v_trainWordsVec() 产生model/W2V/wordVec.model
         
     e.g.
-        cnn=CNNs(verbose=2)\n
-        cnn.packValidData()\n
-        cnn.buildModel()\n
+        cnn=CNNs(verbose=2)
+        cnn.packValidData()
+        cnn.buildModel()
         cnn.train(Trained=False)  
 	"""
 
