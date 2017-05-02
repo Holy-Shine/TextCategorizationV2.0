@@ -1,5 +1,33 @@
 # 工程说明
-## 包含模块
+## 预处理模块
+### 1-分类器输入文件生成
+>preWork.py
+
+	"""preWork.py
+	做一些准备工作
+	含有模块：
+    	divideDatabase      划分数据集、验证集、测试集
+    	nb_crtCls2Terms     创建类别-词语字典
+    	nb_crtCls2Text      创建类别-文章-文字字典
+    	w2v_crtPaper2words  创建word2vec的训练格式文件
+    	w2v_trainWordsVec() 训练词向量
+    	rnn_divideDataBase() RNN三种集合切分
+    
+	生成文件
+    	dict.pkl                 形式{class1:[word1,word2...],class2:[...]}
+    	cls2Text.pkl         形式{class1:[text1,text2...],class2:[...]}
+    
+	"""
+### 2-工具函数包
+>toolFunc.py
+
+	"""toolFunc.py
+	工具函数库
+	包含模块：
+   		segText         中文分词，返回分好词的list
+    	rmvStopWord    去停用词
+	"""
+## 分类器模块
 ### 1-朴素贝叶斯
 >NavieBayes.py
 	
