@@ -1,11 +1,33 @@
 # coding=utf-8
 """使用RNNs进行文本分类
 
-输入：
-    word2vec向量
-    train.txt\vaild.txt\test.txt
-输出：
-    预测模型
+    class RNNs:
+        __init__(inputShape,maxLenth,batch_size,n_epoch,verbose, shuffle)
+            :param
+                inputShape:输入维度，实验中为词向量维度.默认300\n
+                maxLenth:时间步最长个数，实验中为最大文本词语个数
+                batch_size:训练批大小.默认300\n
+                nb_epoch:训练迭代次数.默认100\n
+                verbose:显示训练信息.默认1\n
+                shuffle:是否打乱数据.默认1
+        bulidModel():
+            构建模型
+        train():
+            训练模型
+        gLoadTrainData(batchsize):
+            训练集加载生成器
+        packValidData():
+            组装验证集合
+            
+    文件依赖（需要下列模块产生的模型文件）：
+        preWork.py:
+            w2v_crtPaper2words  产生dataSet/w2v_paper2words.txt
+            w2v_trainWordsVec() 产生model/W2V/wordVec.model
+    e.g.
+        lstm=RNNs(inputShape=100,maxLenth=100)\n
+        lstm.packValidData()\n
+        lstm.buildModel()\n
+        lstm.train(Trained=False)
 """
 from keras.models import Sequential
 from keras.layers import Masking, Dropout, Dense,Embedding

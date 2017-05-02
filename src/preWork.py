@@ -153,9 +153,9 @@ def w2v_trainWordsVec(dimension=500,window=5,min_count=3):
     '''使用word2vec训练语料
     
     文件输入:
-        preTrain/w2v_paper2words.txt
+        dataSet/w2v_paper2words.txt
     模型输出：
-        model/wordVec.model
+        model/W2V/wordVec.model
     '''
     #输入语料
     inq='../dataSet/w2v_paper2words.txt'

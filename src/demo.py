@@ -3,6 +3,7 @@ import gensim.models as mod
 import cPickle
 import gensim.models as vecMod
 from pylab import *
+from RNNs import RNNs
 # 导入模型
 # def getclose(model,str):
 #     result = model.most_similar(str)
@@ -12,3 +13,4 @@ from pylab import *
 # model[u'金融']
 # getclose(model,u'金融')
 figure(figsize=(8,6),dpi=80)
+cnn=RNNs()
